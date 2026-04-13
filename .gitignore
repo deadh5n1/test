@@ -1,0 +1,33 @@
+```
+# Android build outputs
+build/
+.gradle/
+*/build/
+*.apk
+*.aar
+*.jar
+
+# Android Studio and IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log Files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Gradle cache
+.gradle/
+
+# Android generated files
+captures/
+.externalNativeBuild/
+```
