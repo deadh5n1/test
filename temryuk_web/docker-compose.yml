@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  temryuk-news:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data  # Для сохранения БД
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - ADMIN_PASSWORD_HASH=${ADMIN_PASSWORD_HASH}
+    restart: unless-stopped
