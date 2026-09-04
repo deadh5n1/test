@@ -1,0 +1,32 @@
+# Temryuk News Web Application
+# Core dependencies
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# Database
+sqlalchemy==2.0.25
+aiosqlite==0.19.0
+
+# Templates
+jinja2==3.1.3
+
+# Security
+passlib[bcrypt]==1.7.4
+itsdangerous==2.1.2
+python-dotenv==1.0.0
+
+# Scheduling
+apscheduler==3.10.4
+
+# Parsing
+beautifulsoup4==4.12.3
+aiohttp==3.9.1
+lxml==5.1.0
+
+# Optional: Playwright for MAX parser
+# playwright==1.40.0
+
+# Development
+pytest==7.4.4
+pytest-asyncio==0.23.3

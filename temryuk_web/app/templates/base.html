@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Temryuk News{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#1e40af'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .markdown-body h1 { font-size: 2em; font-weight: bold; margin: 0.5em 0; }
+        .markdown-body h2 { font-size: 1.5em; font-weight: bold; margin: 0.5em 0; color: #2563eb; }
+        .markdown-body p { margin: 0.5em 0; line-height: 1.6; }
+        .markdown-body a { color: #2563eb; text-decoration: underline; }
+        .markdown-body ul, .markdown-body ol { margin: 0.5em 0; padding-left: 2em; }
+        .markdown-body hr { margin: 1em 0; border-top: 1px solid #e5e7eb; }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <!-- Header -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <a href="/" class="text-2xl font-bold text-primary">📰 Temryuk News</a>
+                <nav class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-primary">Дайджесты</a>
+                    <a href="/digests" class="text-gray-600 dark:text-gray-300 hover:text-primary">Все выпуски</a>
+                    {% if request.state.is_authenticated %}
+                        <a href="/admin" class="text-gray-600 dark:text-gray-300 hover:text-primary">Админка</a>
+                        <form action="/logout" method="post" class="inline">
+                            <button type="submit" class="text-gray-600 dark:text-gray-300 hover:text-primary">Выход</button>
+                        </form>
+                    {% else %}
+                        <a href="/login" class="text-gray-600 dark:text-gray-300 hover:text-primary">Вход</a>
+                    {% endif %}
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                        🌙
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-800 border-t mt-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <p class="text-center text-gray-500 dark:text-gray-400">
+                © 2024 Temryuk News. Система сбора и генерации дайджестов.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference or default to light
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            themeToggle.textContent = '☀️';
+        } else {
+            html.classList.remove('dark');
+            themeToggle.textContent = '🌙';
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                themeToggle.textContent = '🌙';
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                themeToggle.textContent = '☀️';
+            }
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

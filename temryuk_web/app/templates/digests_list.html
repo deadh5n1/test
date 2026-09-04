@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Все дайджесты - Temryuk News{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">📚 Все дайджесты</h1>
+            <p class="text-gray-600 dark:text-gray-400">Архив всех выпусков</p>
+        </div>
+        <a href="/" class="text-primary hover:underline">← На главную</a>
+    </div>
+</div>
+
+{% if digests %}
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {% for digest in digests %}
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 line-clamp-2">
+                    {{ digest.title }}
+                </h2>
+                
+                <div class="space-y-2 mb-4">
+                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                        <span>📅</span>
+                        <span class="ml-2">{{ digest.generated_at.strftime('%d.%m.%Y %H:%M') }}</span>
+                    </div>
+                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                        <span>📝</span>
+                        <span class="ml-2">{{ digest.news_count }} новостей</span>
+                    </div>
+                </div>
+                
+                <a href="/digest/{{ digest.id }}" 
+                   class="inline-block w-full text-center bg-primary hover:bg-secondary text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                    Открыть →
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if total_pages > 1 %}
+        <div class="mt-8 flex justify-center space-x-2">
+            {% if page > 1 %}
+                <a href="?page={{ page - 1 }}"
+                   class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                    ← Назад
+                </a>
+            {% endif %}
+            
+            <span class="px-4 py-2 text-gray-700 dark:text-gray-300">
+                Страница {{ page }} из {{ total_pages }}
+            </span>
+            
+            {% if page < total_pages %}
+                <a href="?page={{ page + 1 }}"
+                   class="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300">
+                    Вперёд →
+                </a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% else %}
+    <div class="text-center py-12">
+        <div class="text-6xl mb-4">📭</div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Дайджестов пока нет</h3>
+        <p class="text-gray-600 dark:text-gray-400">Первый выпуск появится после сбора новостей</p>
+    </div>
+{% endif %}
+{% endblock %}
