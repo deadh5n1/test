@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}{{ digest.title }} - Temryuk News{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6 flex items-center justify-between">
+        <a href="/" class="text-primary hover:underline">← Назад к дайджестам</a>
+        <div class="flex space-x-2">
+            <button onclick="copyDigest()" class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                📋 Копировать
+            </button>
+            <a href="/digest/{{ digest.id }}/download" class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                ⬇️ Скачать .md
+            </a>
+        </div>
+    </div>
+
+    <!-- Digest Card -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">{{ digest.title }}</h1>
+        
+        <div class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400 mb-6 pb-6 border-b">
+            <span>📅 {{ digest.generated_at.strftime('%d.%m.%Y %H:%M') }}</span>
+            <span>•</span>
+            <span>📝 {{ digest.news_count }} новостей</span>
+        </div>
+
+        <!-- Markdown Content -->
+        <div id="digest-content" class="markdown-body prose dark:prose-invert max-w-none">
+            {{ digest.content | safe }}
+        </div>
+    </div>
+</div>
+
+<script>
+function copyDigest() {
+    const content = document.getElementById('digest-content').innerText;
+    navigator.clipboard.writeText(content).then(() => {
+        alert('Текст скопирован в буфер обмена!');
+    }).catch(err => {
+        console.error('Ошибка копирования:', err);
+        alert('Не удалось скопировать текст');
+    });
+}
+</script>
+{% endblock %}

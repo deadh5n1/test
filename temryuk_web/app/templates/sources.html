@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Источники - Temryuk News{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">📡 Источники новостей</h1>
+            <p class="text-gray-600 dark:text-gray-400">Управление источниками сбора</p>
+        </div>
+        <a href="/admin" class="text-primary hover:underline">← Назад в админку</a>
+    </div>
+</div>
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <table class="w-full">
+        <thead class="bg-gray-50 dark:bg-gray-900/50">
+            <tr>
+                <th class="text-left py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400">Название</th>
+                <th class="text-left py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400">Тип</th>
+                <th class="text-left py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400">URL</th>
+                <th class="text-left py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400">Последняя синхронизация</th>
+                <th class="text-left py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400">Статус</th>
+                <th class="text-right py-4 px-6 text-sm font-medium text-gray-500 dark:text-gray-400">Действия</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+            {% for source in sources %}
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-900/30">
+                    <td class="py-4 px-6">
+                        <span class="font-medium text-gray-900 dark:text-white">{{ source.name }}</span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                            {{ source.source_type }}
+                        </span>
+                    </td>
+                    <td class="py-4 px-6">
+                        <a href="{{ source.url }}" target="_blank" class="text-primary hover:underline text-sm truncate max-w-xs block">
+                            {{ source.url }}
+                        </a>
+                    </td>
+                    <td class="py-4 px-6 text-sm text-gray-500 dark:text-gray-400">
+                        {% if source.last_sync %}
+                            {{ source.last_sync.strftime('%d.%m.%Y %H:%M') }}
+                        {% else %}
+                            Никогда
+                        {% endif %}
+                    </td>
+                    <td class="py-4 px-6">
+                        {% if source.is_active %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+                                ✓ Активен
+                            </span>
+                        {% else %}
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400">
+                                ✗ Отключен
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td class="py-4 px-6 text-right">
+                        <button onclick="toggleSource({{ source.id }})" 
+                                class="text-sm {{ 'text-red-600 hover:text-red-800' if source.is_active else 'text-green-600 hover:text-green-800' }} font-medium transition-colors">
+                            {{ 'Отключить' if source.is_active else 'Включить' }}
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    {% if not sources %}
+        <div class="text-center py-12">
+            <p class="text-gray-500 dark:text-gray-400">Источников пока нет</p>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+async function toggleSource(sourceId) {
+    try {
+        const response = await fetch(`/admin/sources/${sourceId}/toggle`, {
+            method: 'POST'
+        });
+        
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Ошибка при изменении статуса');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Ошибка при изменении статуса');
+    }
+}
+</script>
+{% endblock %}
