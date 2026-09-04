@@ -1,0 +1,147 @@
+# Общие настройки
+app:
+  name: "Темрюк Дайджест"
+  time_window_hours: 48
+  max_news_per_source: 30
+  timezone: "Europe/Moscow"
+
+# Режим генерации дайджеста
+digest:
+  mode: "summary"                # "summary" | "raw"
+  summary_max_words: 30
+  include_original_links: true
+  include_sources_in_footer: true
+  output_format: "markdown"      # "markdown" | "plain" | "html"
+
+# Настройка источников (можно выключить любой)
+sources:
+  - id: admkrai
+    name: "Администрация КК"
+    type: web
+    url: "https://admkrai.krasnodar.ru/content/1131/"
+    enabled: true
+    priority: 2
+    
+  - id: adm_temryuk_raion
+    name: "Администрация Темрюкского района"
+    type: web
+    url: "https://www.temryuk.ru/presscenter/news/"
+    enabled: true
+    priority: 5
+    
+  - id: adm_temryuk
+    name: "Администрация Темрюка"
+    type: web
+    url: "https://admtemruk.ru/presscenter/news/"
+    enabled: true
+    priority: 5
+    
+  - id: vk_babenkov
+    name: "Глава района (ВК)"
+    type: vk
+    url: "https://vk.ru/f.babenkov"
+    enabled: true
+    priority: 4
+    
+  - id: vk_opershtab
+    name: "Оперштаб КК (ВК)"
+    type: vk
+    url: "https://vk.ru/opershtab23"
+    enabled: true
+    priority: 3
+    
+  - id: max_channels
+    name: "Каналы в MAX"
+    type: max
+    enabled: true
+    priority: 5
+    channels:
+      - "temryuk_official"
+      - "admkrai23"
+      - "opershtab_max"
+
+# Фильтр по темам (категориям)
+topic_filter:
+  enabled: true
+  allowed_topics:
+    - "ЧС"
+    - "ЖКХ"
+    - "Погода"
+    - "Соцсфера"
+    - "Инфраструктура"
+    - "События"
+  min_priority: 1
+  force_include:
+    - "ЧС"
+
+# Фильтр по местности
+location_filter:
+  enabled: true
+  mode: "priority"               # "strict" | "priority" | "disabled"
+  
+  priority_locations:
+    - "Темрюк"
+    - "Темрюкский район"
+    - "станица Голубицкая"
+    - "поселок Кучугуры"
+    - "поселок Тамань"
+    - "станица Старотитаровская"
+    - "поселок Ильич"
+    - "поселок Сенной"
+    - "хутор Белый"
+    - "поселок Стрелка"
+    
+  include_nearby: true
+  nearby_locations:
+    - "Анапа"
+    - "Славянск-на-Кубани"
+    - "Приморско-Ахтарск"
+    - "Крымск"
+    - "Краснодар"
+    
+  regional_keywords:
+    - "Краснодарский край"
+    - "Кубань"
+    - "краевой"
+
+# Настройки категоризации (ключевые слова)
+categories:
+  ЧС:
+    priority: 5
+    keywords: ["пожар", "ДТП", "авария", "спасатели", "МЧС", "погиб", "ранен", "утонул", "взрыв", "обрушение"]
+  ЖКХ:
+    priority: 4
+    keywords: ["вода", "отопление", "электричество", "газ", "отключение", "ТКО", "мусор", "тариф", "лифт"]
+  Погода:
+    priority: 3
+    keywords: ["шторм", "ветер", "жара", "мороз", "предупреждение", "гололёд", "ливень", "град", "туман"]
+  Соцсфера:
+    priority: 2
+    keywords: ["выплаты", "пенсии", "пособия", "больница", "школа", "садик", "спорт", "культура"]
+  Инфраструктура:
+    priority: 2
+    keywords: ["дорога", "ремонт", "благоустройство", "двор", "ливнёвка", "стройка", "транспорт"]
+  События:
+    priority: 1
+    keywords: ["праздник", "фестиваль", "концерт", "выставка", "открытие", "ярмарка"]
+
+# Настройки парсинга
+parsing:
+  request_timeout: 15
+  page_load_timeout: 30
+  random_delay_min: 1.0
+  random_delay_max: 3.0
+  user_agent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+
+# База данных
+database:
+  path: "data/news.db"
+  backup_enabled: true
+  backup_folder: "data/backups/"
+
+# Логирование
+logging:
+  level: "INFO"
+  file: "logs/app.log"
+  rotation: "10 MB"
+  retention: "7 days"
